@@ -1,0 +1,83 @@
+---
+title: "Victims of Auschwitz concentration camp"
+author: 
+  - Dingning Li
+thanks: "Code and data are available at:"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+date-format: long
+format: pdf
+number-sections: true
+toc: TRUE
+bibliography: reference.bib
+---
+# Introduction
+Reviewing history, humanity has witnessed numerous tragic events that led to the loss of lives, one of the most is the histories of the Holocaust, particularly focusing on the victims of Auschwitz concentration camp. By the interactive capabilities of a Shiny app, presenting a visualization of the ethnic origins and numbers of individuals who suffered under the tragic event. I utilize three variables in datasheet, "Residence", "Birthplace" and "Religion" to allow users to specify groups they interest in. In the following discussion, the three variables under investigation are crucial to uncovering potential patterns behind the Nazi atrocities. This approach allows us to analyze deeper into the historical context, revealing insights into the calculated strategies employed by the Nazis during the Holocaust.
+
+# Data
+The dataset, derived from the Auschwitz death certificates spanning the years 1942 to 1943, comprises several variables recorded from historical archives. These variables likely include crucial information such as the victims' names, birth dates, places of birth, residences prior to detention, occupations, and the dates of their deaths. The data contains total 65,280 observations. I use several r packages, including [@citereadr], [@citedplyr],[@ciiteggplot2], [@citeR].
+```{r, echo=FALSE }
+library(readr)
+
+data <- read.csv("/cloud/project/Auschwitz_death/death_1942_1943.csv")
+data_six_columns <- data[, 1:7]
+print(head(data_six_columns))
+
+```
+The data set contains seven variables, all dates related variables are expressed in yyyy-mm-dd:
+- Last.Name: last name of the victim
+- First.Name: fist name of the victim
+- Date.of.Birth: date of birth of the victim
+- Date.of.Death: date of death of the victim
+- Birthplace: birthplace of the victim
+- Residence: officially registered nationality before the victim being deported to Auschwitz
+- Religion: the religious affiliation of the victim
+
+
+# Results
+```{r, echo=FALSE, message=FALSE }
+library(dplyr)
+library(ggplot2)
+
+top_residences <- data %>%
+  count(Residence, sort = TRUE) %>%
+  top_n(5, n)
+
+# Plot for top 5 residences
+ggplot(top_residences, aes(x = reorder(Residence, n), y = n, fill = Residence)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Top 5 Residences of Victims", x = "Residence", y = "Count") +
+  theme_minimal() +
+  coord_flip() 
+
+
+```
+The graph  presents a bar chart that displays the five most common places of residence recorded for victims of the Holocaust, as indicated by the Auschwitz death certificates from the dataset. Each bar represents a different residence, color-coded for distinction. From bottom to top, the bars show Brüssel, Krakau, Paris XI, Warschau, and Amsterdam, with the length of each bar corresponding to the count of victims from each location. Amsterdam has the longest bar, indicating it had the highest number of victims among these top residences, followed by Warschau, Paris XI, Krakau, and Brüssel, with Brüssel having the smallest count among the five. 
+
+```{r, echo=FALSE }
+# Count top 5 religions
+top_religions <- data %>%
+  count(Religion, sort = TRUE) %>%
+  top_n(5, n)
+
+# Plot for top 5 religions
+ggplot(top_religions, aes(x = reorder(Religion, n), y = n, fill = Religion)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Top 5 Religions of Victims", x = "Religion", y = "Count") +
+  theme_minimal() +
+  coord_flip() 
+```
+The graph  is a bar chart displaying the religious affiliations of Holocaust victims, based on the Auschwitz death certificates dataset. The chart ranks the top five religions, showing bars with varying lengths according to the count of victims associated with each religion. From bottom to top, the bars are color-coded and represent Atheist, Greek Orthodox, Protestant, Jew, and Catholic. The longest bar at the top signifies Catholic, indicating it is one of the most recorded religions among the victims in the dataset, while the shortest bar at the bottom represents Atheist.
+
+The two graphs present a poignant visual representation of the most common residences and religions recorded among the victims of Auschwitz, based on the available death certificate data. The residence graph reveals that Amsterdam, Warschau, Paris XI, Krakau, and Brüssel had the highest numbers of recorded victims, suggesting that these areas were significantly affected by the Nazi regime's deportations to Auschwitz. Similarly, the religion graph indicates a diverse array of religious affiliations among the victims. The number of victims from the Catholic and Jewish faiths far surpasses those of other religions, underscoring a grim aspect of the Nazi agenda. The significant representation of Catholics among the victims indicates the broad scope of Nazi terror, which extended beyond their primary target of Jews and encompassed other religious groups as well. Judaism's prominence in the data reflects the Nazis' virulent anti-Semitism and annihilate the Jewish population, which was central to the Holocaust's brutality. These graphs serve as a stark reminder of the persecution's reach, affecting individuals of varying religious backgrounds and revealing the extensive impact of Nazi ideologies across Europe.
+
+# Discussion
+Based on Bouie’s analysis about American slavery history, we could draw parallels between the comprehensiveness of American slavery and the statistics of Holocaust victims. The data sets detailing slave voyages reveals the stark dehumanization that data alone can sometimes impart. Just as the vast numbers associated with the transatlantic slave trade can fail to convey the individual suffering and systemic brutality endured by millions, so too can the sheer statistical magnitude of the Holocaust overshadow the personal narratives of each victim [@bouie2022slavery]. 
+
+In discussing the atrocities of the Auschwitz concentration camp, it becomes essential to contextualize the data within the individual human experiences it represents. The discussion would extend to how the top occurrences of certain residences and religions mirror the targeted nature of the Nazi regime's violence, much like the calculated oppression of enslaved Africans. It would also critically examine the limitations of data in capturing the full scope of such historical horrors. Therefore, as we dissect the statistics of Holocaust victims by residence and religion, we are reminded to acknowledging each number as a life, each data point as a story untold, and each analysis as a step towards a more profound historical empathy.
+
+# Conclusion
+In conclusion, interactive tables we used has enable us to present an analytical overview of the Holocaust’s victims, with a particular focus on the Auschwitz concentration camp. The app’s graphs and tables not only provided a quantitative summary fo victims by residence and religion, but also allowed us to engage more with the data. Our discussion informed by Jamelle Bouie’s idea on the representation of American slavery, highlighting the importance of narrative in the interpretation of historical data. We recognized individual memory that behind every statistic of suffering, resilience and the human spirit.
+
+\newpage
+
+# Reference
